@@ -15,9 +15,9 @@ MongoClient.connect(data.url)
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
-    const   db                  = client.db('rest-users'),
+    const   db                  = client.db('createposttool'),
             usersCollection     = db.collection('users'),
-            postsCollection     = db.collection('rest_posts');
+            postsCollection     = db.collection('posts');
 
     app.post('/login', (req, res) => {
         usersCollection.findOne({
