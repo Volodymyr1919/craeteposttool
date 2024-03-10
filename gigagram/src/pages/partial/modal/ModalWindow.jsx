@@ -33,14 +33,15 @@ const ModalWindow = observer(() => {
       return setReqMedia("Image or Video Field is required");
     }
 
-    const resp = RequestsStore.doPost(ConfigStore.url + "/post", {
+    RequestsStore.doPost(ConfigStore.url + "/post", {
         title: data.title,
         description: data.description,
         image: data.image,
         video: data.video,
         status: "active"
     })
-    .then(() => {
+    .then((resp) => {
+      console.log(resp);
       handleClose();
       ConfigStore.setUpdatePosts(true);
       ConfigStore.setSnackSeverity("success");

@@ -28,7 +28,7 @@ const PrivateHeader = observer(() => {
       resolve();
     })
     .then(() => {
-      return RequestsStore.doGet(ConfigStore.url + "/me");
+      return RequestsStore.doGet(ConfigStore.url + "/me/" + localStorage.getItem("userID"));
     })
     .then((me) => {
       if (me === "Forbidden") {
@@ -184,7 +184,7 @@ const PrivateHeader = observer(() => {
         </Toolbar>
       </Container>
       <ModalWindow />
-      <SearchModal />
+      {/* <SearchModal /> */}
     </AppBar>
   );
 })

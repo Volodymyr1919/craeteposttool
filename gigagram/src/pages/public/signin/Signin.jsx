@@ -29,11 +29,11 @@ const Signin = observer(() => {
       username: data.username,
       password: data.password,
     });
-    if (resp.token) {
-      localStorage.setItem("token", resp.token);
+    if (resp._id) {
+      localStorage.setItem("userID", resp._id);
       navigate("/feed");
     } else {
-      ConfigStore.setErr(resp === "Bad Request" ? "Wrong username or password" : resp);
+      ConfigStore.setErr(resp === "Not Found" ? "Wrong username or password" : resp);
       ConfigStore.setIsShow(true);
     }
   };

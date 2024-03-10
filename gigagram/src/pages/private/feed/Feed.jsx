@@ -61,26 +61,9 @@ const FeedPage = observer(() => {
       return RequestsStore.doGet(ConfigStore.url + "/posts");
     })
     .then((post) => {
-      //  ConfigStore.setLoading(false);
-      if(post === "Forbidden") {
-        ConfigStore.setErr("Token has been burned");
-        ConfigStore.setIsShow(true);
-      } else {
-        setPosts(post);
-      }
+      setPosts(post);
     })
   }, []);
-
-  useEffect(() => {
-    if(ConfigStore.me.username) {
-      RequestsStore.doGet(ConfigStore.url + "/followings/" + ConfigStore.me.username)
-      .then((resp) => {
-        ConfigStore.setFollowings(resp.following);
-      })
-    } else{
-      return;
-    }
-  }, [ConfigStore.me.username]);
 
   return (
     <>

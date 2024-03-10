@@ -23,7 +23,7 @@ const MyPage = observer(() => {
       resolve();
     })
     .then(() => {
-      return RequestsStore.doGet(ConfigStore.url + "/me");
+      return RequestsStore.doGet(ConfigStore.url + "/me/" + localStorage.getItem("userID"));
     })
     .then((myInfo) => {
       ConfigStore.setLoading(false);

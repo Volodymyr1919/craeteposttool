@@ -29,17 +29,17 @@ const RecomendUsers = observer(() => {
       })
     },[]);
 
-    const toUser = (username) => {
-      navigate(`/user/${username}`);
-    };
+  //   const toUser = (username) => {
+  //     navigate(`/user/${username}`);
+  //   };
 
-  const filteredUsers = users.filter((person) => {
-    return (
-      person.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (person.fullName &&
-        person.fullName.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-  });
+  // const filteredUsers = users.filter((person) => {
+  //   return (
+  //     person.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     (person.fullName &&
+  //       person.fullName.toLowerCase().includes(searchTerm.toLowerCase()))
+  //   );
+  // });
 
   function handleSearch(event) {
     setSearchTerm(event.target.value);
@@ -76,7 +76,7 @@ const RecomendUsers = observer(() => {
             marginBottom: "10px"
           }}
         />
-      {filteredUsers.map((person) => {
+      {users.map((person) => {
         const labelId = `checkbox-list-secondary-label-${person._id}`;
         return (
           <ListItem

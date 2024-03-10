@@ -19,7 +19,7 @@ MongoClient.connect(data.url)
             usersCollection     = db.collection('users'),
             postsCollection     = db.collection('posts');
 
-    app.post('/login', (req, res) => {
+    app.post('/signin', (req, res) => {
         usersCollection.findOne({
             name: req.body.username, 
             password: req.body.password
@@ -42,14 +42,11 @@ MongoClient.connect(data.url)
                 res.sendStatus(403);
             } else {
                 usersCollection.insertOne({
-                    business_name: req.body.business_name,
-                    type_business: req.body.type_business,
                     name: req.body.username,
                     password: req.body.password,
-                    who: req.body.who,
-                    bonus: req.body.bonus
+                    confirm_password: req.body.confirm_password
                 }).then(resp => {
-                    res.send(resp.insertedId);
+                    res.send(resp);
                 })
             }
         })
@@ -57,6 +54,7 @@ MongoClient.connect(data.url)
 
     app.get('/me/:id', (req, res) => {      
         let id = new ObjectId(req.params.id);
+        console.log(id);
         usersCollection.findOne({
             _id: id
         })
@@ -69,11 +67,8 @@ MongoClient.connect(data.url)
         })
     });
 
-    app.get('/posts/:business_name', (req, res) => {
-        postsCollection.find({
-            business_name : req.params.business_name,
-            deleted : false
-        }).toArray()
+    app.get('/posts', (req, res) => {
+        postsCollection.find().toArray()
         .then(result => {
             if (result) {
                 res.send(result);
@@ -84,9 +79,7 @@ MongoClient.connect(data.url)
     });
 
     app.get('/users', (req, res) => {
-        usersCollection.find({
-            who : "visitor"
-        }).toArray()
+        usersCollection.find().toArray()
         .then(result => {
             if (result) {
                 res.send(result);
@@ -96,11 +89,13 @@ MongoClient.connect(data.url)
         })
     });
 
-    app.post('/offer', (req, res) => {
+    app.post('/post', (req, res) => {
         postsCollection.findOne({
-            condition: req.body.condition,
-            required_bonuses: req.body.required_bonuses,
-            gift: req.body.gift,
+            title: req.body.title,
+            description: req.body.description,
+            image: req.body.image,
+            video: req.body.video,
+            status: "active",
             deleted : false
         })
         .then(result => {
@@ -108,107 +103,15 @@ MongoClient.connect(data.url)
                 res.sendStatus(403);
             } else {
                 postsCollection.insertOne({
-                    business_name: req.body.business_name,
-                    condition: req.body.condition,
-                    required_bonuses: req.body.required_bonuses,
-                    gift: req.body.gift,
+                    title: req.body.title,
+                    description: req.body.description,
+                    image: req.body.image,
+                    video: req.body.video,
+                    status: "active",
                     deleted : false
-                }).then(() => {
-                    res.sendStatus(200);
+                }).then((resp) => {
+                    res.send(resp);
                 })
-            }
-        })
-    });
-
-    app.delete('/posts', (req, res) => {      
-        let id = new ObjectId(req.body.id);
-        postsCollection.updateOne(
-            {
-                _id: id,
-                deleted: false
-            },
-            {$set: {deleted: true}}
-        )
-        .then(result => {
-            if (result) {
-                res.send(result);
-            } else {
-                res.sendStatus(404)
-            }
-        })
-    });
-
-    app.get('/oldPosts/:business_name', (req, res) => {
-        postsCollection.find({
-            business_name : req.params.business_name,
-            deleted : true
-        }).toArray()
-        .then(result => {
-            if (result) {
-                res.send(result);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-    });
-
-    app.post('/returnPost', (req, res) => {
-        let id = new ObjectId(req.body.id);
-        postsCollection.updateOne(
-            {
-                _id: id,
-                deleted: true
-            },
-            {$set: {deleted: false}}
-        )
-        .then(result => {
-            if (result) {
-                res.send(result);
-            } else {
-                res.sendStatus(404)
-            }
-        })
-    });
-
-    app.post('/spendbonus', (req, res) => {
-        let id = new ObjectId(req.body.id);
-        usersCollection.updateOne(
-            {
-                _id: id,
-                bonus: {$gt: 0}
-            },
-            {$inc: {bonus: -req.body.bonus}}
-        )
-        .then(result => {
-            if (result) {
-                res.send(result);
-            } else {
-                res.sendStatus(404)
-            }
-        })
-    });
-
-    app.use(
-        rateLimit({
-          windowMs: 24 * 60 * 60 * 1000,
-          max: 1,
-          headers: true
-        })
-    );
-
-    app.post('/getbonus', (req, res) => {
-        let id = new ObjectId(req.body.id);
-        usersCollection.updateOne(
-            {
-                _id: id
-            },
-            {$inc: {bonus: 1}}
-        )
-        .then(result => {
-            if (result) {
-                res.send(result);
-            } else {
-                res.sendStatus(404)
             }
         })
     });

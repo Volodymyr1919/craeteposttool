@@ -27,18 +27,16 @@ const SignUp = observer(() => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log(data);
-    const token = await RequestsStore.doPost(ConfigStore.url + "/signup", {
+    const resp = await RequestsStore.doPost(ConfigStore.url + "/signup", {
       username: data.username,
       password: data.password,
       confirm_password: data.confirmPassword,
     });
-    if (token.jwt) {
-      ConfigStore.setToken(token.jwt);
-      localStorage.setItem("token", token.jwt);
+    if (resp.acknowledged === true) {
+      localStorage.setItem("userID", resp.insertedId)
       navigate("/feed");
     } else {
-      ConfigStore.setErr(token);
+      ConfigStore.setErr(resp);
       ConfigStore.setIsShow(true);
     }
   };
