@@ -1,0 +1,24 @@
+{
+    "name": "new_big_project",
+    "version": "1.0.0",
+    "description": "Next try",
+    "main": "server.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "nodemon server.js"
+    },
+    "author": "Volodymyr",
+    "license": "ISC",
+    "dependencies": {
+      "body-parser": "^1.20.1",
+      "cors": "^2.8.5",
+      "ejs": "^3.1.8",
+      "express": "^4.18.2",
+      "express-rate-limit": "^6.7.0",
+      "mongodb": "^4.12.1",
+      "package.json": "^2.0.1"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.20"
+    }
+  }
